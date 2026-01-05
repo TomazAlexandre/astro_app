@@ -1,0 +1,19 @@
+name: astro_app
+description: App de Horóscopo Premium
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_riverpod: ^2.5.0
+
+  cupertino_icons: ^1.0.6
+
+flutter:
+  uses-material-design: true
