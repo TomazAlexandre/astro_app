@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'navigation_provider.dart';
+import 'navigation_provider.dart'; 
 import '../home/pages/home_page.dart';
 import '../compatibility/pages/compatibility_page.dart';
 import '../moon/pages/moon_page.dart';
 import '../profile/pages/profile_page.dart';
+
 
 class MainNavigation extends ConsumerWidget {
   const MainNavigation({super.key});
@@ -21,10 +22,13 @@ class MainNavigation extends ConsumerWidget {
       ProfilePage(),
     ];
 
+    final safeIndex =
+        index >= 0 && index < pages.length ? index : 0;
+
     return Scaffold(
-      body: pages[index],
+      body: pages[safeIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: index,
+        currentIndex: safeIndex,
         onTap: (i) =>
             ref.read(navigationProvider.notifier).changeTab(i),
         type: BottomNavigationBarType.fixed,

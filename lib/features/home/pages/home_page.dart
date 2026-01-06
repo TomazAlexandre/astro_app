@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../widgets/sign_header.dart';
 import '../widgets/daily_card.dart';
 import '../widgets/quick_action_card.dart';
+import '../../horoscope/provider/horoscope_provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    const sign = 'aries';
+
+    final horoscopeAsync = ref.watch(horoscopeProvider(sign));
+
     return Scaffold(
       backgroundColor: const Color(0xFF0B0F1A),
       body: Column(
@@ -16,15 +23,25 @@ class HomePage extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: ListView(
-                children: const [
-                  DailyCard(
-                    text:
-                        'Hoje é um dia favorável para ouvir sua intuição e agir com mais confiança.',
-                  ),
-                  SizedBox(height: 24),
-                  _QuickActions(),
-                ],
+              child: horoscopeAsync.when(
+                loading: () => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                error: (error, _) => ListView(
+                  children: const [
+                    DailyCard(
+                      text:
+                          'Não foi possível carregar o horóscopo hoje.',
+                    ),
+                  ],
+                ),
+                data: (horoscope) => ListView(
+                  children: [
+                    DailyCard(text: horoscope.text),
+                    const SizedBox(height: 24),
+                    const _QuickActions(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -49,17 +66,23 @@ class _QuickActions extends StatelessWidget {
         QuickActionCard(
           icon: Icons.nightlight_round,
           label: 'Lua',
-          onTap: () {},
+          onTap: () {
+            // depois conecta com navegação
+          },
         ),
         QuickActionCard(
           icon: Icons.favorite,
           label: 'Compat.',
-          onTap: () {},
+          onTap: () {
+            // depois conecta com navegação
+          },
         ),
         QuickActionCard(
           icon: Icons.person,
           label: 'Perfil',
-          onTap: () {},
+          onTap: () {
+            // depois conecta com navegação
+          },
         ),
       ],
     );
